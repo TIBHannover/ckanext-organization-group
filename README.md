@@ -10,6 +10,8 @@ Compatibility with core CKAN versions:
 | CKAN version    | Compatible?   |
 | --------------- | ------------- |
 |  2.9 | Yes    |
+|  2.10 | Yes   |
+|  2.11 | Yes   |
 | earlier | No |           |
 
 
@@ -39,6 +41,5 @@ To install ckanext-organization-group:
 
         sudo service nginx reload
         sudo service supervisor reload
-
 
 

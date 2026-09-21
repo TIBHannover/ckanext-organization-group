@@ -1,13 +1,12 @@
 # encoding: utf-8
 
-from sqlalchemy.sql.expression import false, null, true
 import ckan.plugins.toolkit as toolkit
 
 
 class Helper():
 
     def get_groups_list():
-        groups = toolkit.get_action('group_list')({}, {'all_fields':true})
+        groups = toolkit.get_action('group_list')({}, {'all_fields': True})
         group_list = []
         temp = {}
         group_list.append(temp)
@@ -22,7 +21,7 @@ class Helper():
         return group_list
     
     def get_organizations_list():
-        orgs = toolkit.get_action('organization_list')({}, {'all_fields':true})
+        orgs = toolkit.get_action('organization_list')({}, {'all_fields': True})
         org_list = []
         temp = {}
         temp['value'] = '0'
@@ -40,30 +39,32 @@ class Helper():
     
 
     def check_plugin_enabled(plugin_name):
-        plugins = toolkit.config.get("ckan.plugins")
-        if plugin_name in plugins:
-            return True
-        return False
+        enabled_plugins = toolkit.config.get("ckan.plugins", "").split()
+        return plugin_name in enabled_plugins
     
 
     def check_access_edit_group(group_id):
+        user_obj = getattr(toolkit.g, 'userobj', None)
+        if not user_obj:
+            return False
         groups = toolkit.get_action('group_list')({}, {'all_fields':True, 'include_users': True})
         for g in groups:
             if g['id'] == group_id:
                 for user in g['users']:
-                    if toolkit.g.userobj.id == user['id']:
+                    if user_obj.id == user['id']:
                         return True
         return False
 
 
     def check_access_add_dataset_to_org(org_id):
+        user_obj = getattr(toolkit.g, 'userobj', None)
+        if not user_obj:
+            return False
         orgs = toolkit.get_action('organization_list')({}, {'all_fields':True, 'include_users': True})
         for org in orgs:
             if org['id'] == org_id:
                 for user in org['users']:
-                    if toolkit.g.userobj.id == user['id']:
+                    if user_obj.id == user['id']:
                         return True
         return False
-
-
 
